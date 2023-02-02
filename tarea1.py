@@ -11,7 +11,7 @@ def verificarDiagonales(mat):
 		if mat[i][i] != mat[i][k]:
 			ans = False
 		i += 1
-	return ans 
+	return ans
 
 ####################################################################################################################################################################################
 #2
@@ -38,10 +38,8 @@ def diferenciaListas(listA, listB):
 			ans.append(i)
 	return ans
 
-#print(diferenciaListas([10, 10, 11, 12, 13, 14, 10, 10, 12, 16, 19],[5, 10, 10, 12, 12, 11]))
-
 #(b)
-def leerImprimir():
+def leerImprimirDiferenciaListas():
 	numberCases = int(stdin.readline())
 	for i in range(numberCases):
 		listA = stdin.readline()[0:-1].split()
@@ -81,36 +79,22 @@ def mostrarPrimos(num):
 			print("%s--> %d" %(char, i), end = "")
 			if char == "":
 				char = ",\n"
-
 			if sumarDigitos(i) in listprim:
 				sumDigitosPri.append(str(i))
 	print("\n")
-	print("Números entre 1 y 100 con suma de dígitos con valor primo:")
+	print("Números entre 1 y %d con suma de dígitos con valor primo:" %(num))
 	print(", ".join(sumDigitosPri))
 
-mostrarPrimos(100)
 #######################################################################################################################
 #5
-def crearMatrizDispersa(m):
-	ans = {}
-	ax = []
-	l, l2 = len(m), len(m[0])
-	for i in range(l):
-		for e in range(l2):
-			if m[i][e] != 0:
-				ax.append((e,m[i][e]))
-		if len(ax) > 0:
-			ans[i] = ax
-		ax = []
-	return ans
-
-def sumarValoresMatriz(dis, par):
+def sumarValoresMatriz(mat, par):
 	ans = 0
 	for i in range(len(par)):
-		y, x = par[i][0], par[i][1]
-		j = 0
-		flag = True
+		y = par[i][0]
 		if y in dis:
+			x = par[i][1]
+			j = 0
+			flag = True
 			while j < len(dis[y]) and flag:
 				if dis[y][j][0] == x:
 					ans += dis[y][j][1]
@@ -119,4 +103,5 @@ def sumarValoresMatriz(dis, par):
 					flag = False
 				j += 1
 	return ans
+
 #############################################################################################################################################
