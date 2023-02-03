@@ -69,18 +69,21 @@ def sumarDigitos(num):
 	return ans
 
 def mostrarPrimos(num):
-	sumDigitosPri = []
-	listprim = []
+	listprim, sumDigitosPri = [], []
 	char = ""
+	i = 2
 	print("Números primos entre 1 y %d:" %(num))
-	for i in range(2, num):
+
+	while i <= num:
 		if esPrimo(i, listprim):
 			listprim.append(i)
 			print("%s--> %d" %(char, i), end = "")
-			if char == "":
-				char = ",\n"
 			if sumarDigitos(i) in listprim:
 				sumDigitosPri.append(str(i))
+			if char == "":
+				char = ",\n"
+		i += 1
+
 	print("\n")
 	print("Números entre 1 y %d con suma de dígitos con valor primo:" %(num))
 	print(", ".join(sumDigitosPri))
