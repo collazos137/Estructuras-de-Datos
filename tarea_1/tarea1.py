@@ -49,13 +49,25 @@ def leerImprimirDiferenciaListas():
 
 #######################################################################################################################################################
 #4
+"""
+def esPrimo(n, listprim):
+  if n < 2: ans = False
+  else:
+    i, ans = 2, True
+    while i * i <= n and ans:
+      if n % i == 0: ans = False
+      i += 1
+  return ans
+"""
+
 def esPrimo(num, listprim):
 	ans = True
-	i = 0
-	while i < len(listprim) and ans:
-		if num % listprim[i] == 0:
-			ans = False
-		i += 1
+	if num != 2: 
+		i = 0
+		while listprim[i] * listprim[i] <= num and ans:
+			if num % listprim[i] == 0:
+				ans = False
+			i += 1
 	return ans
 
 def sumarDigitos(num):
