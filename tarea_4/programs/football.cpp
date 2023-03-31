@@ -74,7 +74,7 @@ int main(){
 	int goals1, goals2;
 	float prom;
 	int flag = 1, flag2, flag3 = 0;
-	int i, j;
+	int i;
 	while(flag){
 		
 		scanf("%d %d", &nteams, &ngames);
