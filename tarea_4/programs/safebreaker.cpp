@@ -4,7 +4,7 @@ Juan Diego Collazos Mejia // ID: 8977837 // March 29st 2023
 ===================================================================================================================
 Complejidad : O(n) 
 ===================================================================================================================
-La complejidad de encontrar cada combinación de números es O(n) (amortiguado) siendo n la cantidad de pistas. Al 
+La complejidad de encontrar cada combinación de números es O(n) (amortizado) siendo n la cantidad de pistas. Al 
 ser una solución por fuerza bruta en el peor de los casos serian 10 pistas y se encontraría una única solución o 
 ninguna, por tanto se compararían 10000 números con 10 pistas lo que serian 100000 comparaciones para un solo caso.
 ===================================================================================================================

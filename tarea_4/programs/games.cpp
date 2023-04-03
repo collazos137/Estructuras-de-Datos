@@ -47,12 +47,7 @@ int main(){
 			leng2 = names[pos2].size();
 			name1 = names[pos1];
 			name2 = names[pos2];
-
-			if(leng1 <= leng2){
-				len = leng1;
-			}else{
-				len = leng2;
-			}
+			len = (leng1 <= leng2) ? leng1 : leng2;
 
 			while(i < len && flag2){
 				if(name1[i] == name2[i]){

@@ -1,21 +1,24 @@
 /*
-====================================================================================================================
+========================================================================================================================
 Juan Diego Collazos Mejia // ID: 8977837 // March 30st 2023
-====================================================================================================================
+========================================================================================================================
 Complejidad : O(n*log(n)) 
-====================================================================================================================
+========================================================================================================================
 La complejidad de organizar todos los equipos con los respectivos criterios seria O(n*log(n)) (que es la complejidad
-del sort() de STL) siendo n la cantidad de equipos ingresados.
-==================================================================================================================== 
+del sort() de STL) siendo n la cantidad de equipos ingresados. Por otro lado, la complejidad de procesar cada partido
+seria O(n)(amortizado) (que es la complejidad del find() de STL) siendo n la cantidad de equipos ingresados, cada vez
+que se ingrese un partido de deberá buscar dentro del vector los equipos correspondientes para actualizar su información.
+========================================================================================================================= 
 */
 #include <stdio.h>
-#include <cstring>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
+
+bool alfa(string name1, string name2);
 
 class Team{
   public:
@@ -50,7 +53,7 @@ class Team{
     }else if(nScoreG != tem.nScoreG){
     	ans = nScoreG > tem.nScoreG;
     }else{
-    	if(strcasecmp(name.c_str(), tem.name.c_str()) < 0){
+    	if(alfa(name, tem.name)){
     		ans = true;
     	}else{
     		ans = false;
@@ -65,6 +68,26 @@ class Team{
   }
 };
 
+bool alfa(string name1, string name2){
+	int ans = false;
+	int flag1 = 1, i = 0;
+	int l = (name1.size() <= name2.size()) ? name1.size() : name2.size();
+	while(i < l && flag1){
+			name1[i] -= (name1[i] > 'Z') ? 32 : 0;
+			name2[i] -= (name2[i] > 'Z') ? 32 : 0;
+		if(name1[i] != name2[i]){
+			flag1 = 0;
+			if(name1[i] < name2[i])
+				ans = true;
+		}
+		++i;
+	}
+	if(flag1){
+		ans = name1.size() < name2.size();
+	}
+	return ans;
+}
+
 int main(){
 	vector<Team> teams(99, Team());
 	vector<Team>::iterator ax1;
@@ -72,7 +95,6 @@ int main(){
 	char team1[16], team2[16];
 	int nteams, ngames;
 	int goals1, goals2;
-	float prom;
 	int flag = 1, flag2, flag3 = 0;
 	int i;
 	while(flag){
@@ -98,7 +120,6 @@ int main(){
 				scanf("%s %d - %d %s", &team1, &goals1, &goals2, &team2);
 				ax1 = find(teams.begin(), teams.begin() + nteams, Team(team1));
 				ax2 = find(teams.begin(), teams.begin() + nteams, Team(team2));
-				//cout << ax1 -> name;
 				ax1 -> nPlayed += 1;
 				ax2 -> nPlayed += 1;
 				ax1 -> nScoreG += goals1;
@@ -133,8 +154,7 @@ int main(){
 				printf(" %15s %3d %3d %3d %3d %3d", teams[i].name.c_str(), teams[i].nPoints, teams[i].nPlayed, teams[i].nScoreG, teams[i].nSufferedG, teams[i].nScoreG - teams[i].nSufferedG);
 
 				if(teams[i].nPlayed != 0){
-					prom = (float(teams[i].nPoints) / (teams[i].nPlayed*3))*100;
-					printf(" %6.2f", prom);
+					printf(" %6.2f",(float(teams[i].nPoints) / (teams[i].nPlayed*3))*100);
 				}else{
 					printf("%7s", "N/A");
 				}

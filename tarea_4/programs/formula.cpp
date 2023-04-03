@@ -4,10 +4,13 @@ Juan Diego Collazos Mejia // ID: 8977837 // March 25st 2023
 ================================================================================================================
 Complegidad : O(n^2)
 ================================================================================================================
-La complejidad de calcular los ganadores de cada sistema de puntuación es O(n^2) siendo n el número de pilotos.
+La complejidad de calcular los puntajes obtenidos por cada piloto es O(n^2) siendo n el número de pilotos.
 En el peor de los casos serian 500 pilotos y se valoran los 500 puestos, y cada caso tiene como máximo 10 
 sistemas de puntuación, por lo tanto en el peor caso posible se necesitarían del orden de 2500000 procedimientos
 para dar respuesta a todos los sistemas de puntuación de un caso.
+
+La complejidad de encontrar los ganadores dentro de todas las puntuaciones totales para cada sistema de puntación
+es O(n) siendo n la cantidad de pilotos.
 ================================================================================================================
 */
 #include <stdio.h>

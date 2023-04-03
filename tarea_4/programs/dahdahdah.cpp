@@ -4,32 +4,30 @@ Juan Diego Collazos Mejia // ID: 8977837 // March 20st 2023
 ====================================================================================================
 Complejidad : O(n)
 ====================================================================================================
-La complejidad de decodificar cada mensaje es O(n), siendo n la cantidad de códigos morse ingresados
-en el respectivo caso, y la complejidad de encontrar cada código en la lista es O(1) amortiguado, ya 
-que en el peor de los casos el código buscado se encontraría al final de la lista de 53 elementos.
+La complejidad de decodificar cada mensaje es O(n) (procesamiento), siendo n la cantidad de códigos
+morse ingresados en el respectivo caso, y la complejidad de encontrar cada código en la lista es O(1)
+amortizado, como la cantidad de los elementos dentro del vector no cambia la complejidad de la
+operación find() es siempre constante en el peor de los casos (53 elementos).
+
+La complejidad de la lectura de datos es lineal O(n) siendo n la cantidad de caracteres que compone 
+cada mensaje.
 ====================================================================================================
 */
 
 #include <stdio.h>
-#include <cstring>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
-void answer(char* letter, char codeMorse[][7], char alfa[][2]){
-    int i = 0;
-    int flag = 1;
-    while(flag){
-        if(strcmp(letter, codeMorse[i]) == 0){
-            flag = 0;
-        }
-        i += 1;
-    }
-    printf("%s", alfa[i-1]);
-}
+using namespace std;
 
 int main(){
     int cases, i, j;
     int flag, flag2;
+    int ax;
     char letter[7], symbol;
-    char codeMorse[][7] = {
+    vector<string> codeMorse = {
         ".-", "-...", "-.-.", "-..",
         ".", "..-.", "--.", "....", "..",
         ".---", "-.-", ".-..", "--", "-.",
@@ -41,7 +39,8 @@ int main(){
         ".----.", "-.-.--", "-..-.", "-.--.", "-.--.-",
         ".-...", "---...", "-.-.-.", "-...-", ".-.-.",
         "-....-", "..--.-", ".-..-.", ".--.-.",};
-    char alfa[][2] = {"A", "B", "C", "D",
+    vector<string> alfa = {
+                 "A", "B", "C", "D",
                  "E", "F", "G", "H", "I",
                  "J", "K", "L", "M", "N",
                  "O", "P", "Q", "R", "S",
@@ -65,7 +64,8 @@ int main(){
             if(symbol == '\n'){
                 flag = 0;
                 letter[j] = '\0';
-                answer(letter, codeMorse, alfa);
+                ax = find(codeMorse.begin(), codeMorse.begin() + 53, letter) - codeMorse.begin();
+                cout << alfa[ax];
                 
             }else if(symbol == ' '){
                 if(flag2){
@@ -73,7 +73,8 @@ int main(){
                     flag2 = 0;    
                 }else{
                     letter[j] = '\0';
-                    answer(letter, codeMorse, alfa);                    
+                    ax = find(codeMorse.begin(), codeMorse.begin() + 53, letter) - codeMorse.begin();
+                    cout << alfa[ax];                   
                     j = 0;
                     flag2 = 1;
                 }
