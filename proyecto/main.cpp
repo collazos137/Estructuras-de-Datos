@@ -2,14 +2,14 @@
 #include <iostream>
 
 int main(){
-    BigInteger num1("789456123456");
-    BigInteger num2("18789");
+    BigInteger num1("789634412566398759852");
+    BigInteger num2("741852963");
     //
     //num1.display();
     //string ans = (num1 <= num2) ? "true" : "false";
 
-    cout << num1.toString() <<  " / " << num2.toString() << " : ";
-    num1.quotien(num2);
+    cout << num1.toString() <<  " % " << num2.toString() << " : ";
+    num1.remainder(num2);
     num1.display();
     /*while(num2 <= num1){
         num1.substract(num2);

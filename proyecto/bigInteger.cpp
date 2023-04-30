@@ -5,8 +5,7 @@
 BigInteger::BigInteger(string str){
     int len, i, n;
     n = (str[0] == '-') ? 1 : 0;
-    sign = n;
-    len = str.size() - n;
+    sign = n, len = str.size() - n;
     digt.resize(len);
     for(i = 0; i < len; ++i){
         digt[len - i - 1] = str[i + n] - '0';
@@ -148,44 +147,84 @@ void BigInteger::product(BigInteger& num2){
 }
 
 void BigInteger::quotien(BigInteger& num2){
-    vector<int> ax1(num2.size());
-    vector<int> ax2;
-    vector<int> ans;
-    int cont = 1;
-    for(int i = 0; i < num2.size() ; ++i){
-        ax1[i] = num2[i];
-    }
-
-    ax2 = ax1;
-
-    while(size() - 1 > ax2.size()){
-        ax2.push_back(0);
-        cont *= 10;
-    }
-
-    rest(digt, ax2);
-
-    while(ax1 <= digt){
-        rest(digt, ax1);
-        ++cont;
-    }
-    if(!cont) ans.push_back(0);
-    while(cont > 0){
-        ans.push_back(cont % 10);
-        cont /= 10;
+    sign = (num2.signf() == sign)? 0 : 1;
+    int flag1 = 1, flag2, flag3, i = size() - 1, t, j, k, n, l;
+    l = (size() >= num2.size()) ? size() - num2.size() + 1 : 1;
+    vector<int> ans(l, 0);
+    while(flag1 && i >= num2.size() - 1){
+        t = i, flag2 = 1, k = num2.size() - 1, j = t;
+        while(k >= 0){
+            if(num2[k] != digt[j]){
+                flag2 = digt[j] > num2[k];
+                k = 0;
+            }
+            --k, --j;
+        }
+        if(!flag2){
+            if(t > num2.size() - 1) --t; 
+            else flag1 = 0;
+        }
+        if(flag1){
+            k = 0, j = t - num2.size() + 1, flag3 = 0, n = i;
+            ans[j] += 1;
+            for(; j <= n ; ++k, ++j){
+                if(flag3){
+                    if(digt[j]){
+                        --digt[j];
+                        flag3 = 0;
+                    }else digt[j] = 9;
+                }
+                if(k < num2.size()){
+                    if(num2[k] > digt[j]){
+                        digt[j] += 10;
+                        flag3 = 1;
+                    }
+                    digt[j] -= num2[k];
+                }
+                if(digt[j]) i = j;
+            }
+        }
     }
     digt = ans;
-    
+    if(!digt[digt.size() - 1] && digt.size() != 1) digt.resize(digt.size() - 1);
 }
 
 void BigInteger::remainder(BigInteger& num2){
-    vector<int> ax(num2.size());
-    for(int i = 0; i < num2.size() ; ++i){
-        ax[i] = num2[i];
+    int flag1 = 1, flag2, flag3, i = size() - 1, t, j, k, n;
+    while(flag1 && i >= num2.size() - 1){
+        t = i, flag2 = 1, k = num2.size() - 1, j = t;
+        while(k >= 0){
+            if(num2[k] != digt[j]){
+                flag2 = digt[j] > num2[k];
+                k = 0;
+            }
+            --k, --j;
+        }
+        if(!flag2){
+            if(t > num2.size() - 1) --t;
+            else flag1 = 0;
+        }
+        if(flag1){
+            k = 0, j = t - num2.size() + 1, flag3 = 0, n = i;
+            for(; j <= n ; ++k, ++j){
+                if(flag3){
+                    if(digt[j]){
+                        --digt[j];
+                        flag3 = 0;
+                    }else digt[j] = 9;
+                }
+                if(k < num2.size()){
+                    if(num2[k] > digt[j]){
+                        digt[j] += 10;
+                        flag3 = 1;
+                    }
+                    digt[j] -= num2[k];
+                }
+                if(digt[j]) i = j;
+            }
+        }
     }
-    while(ax <= digt){
-        rest(digt, ax);
-    }
+    digt.resize(++i);
 }
 
 string BigInteger::toString(){
