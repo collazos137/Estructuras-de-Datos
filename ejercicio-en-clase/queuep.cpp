@@ -22,7 +22,7 @@ Complejidad de "enqueue()" : O(n) siendo n el tamaño de la cola.
 ----------------------------------------------------------------------------------------------------
 Explicación: En el peor de los casos el elemento que se quiere ingresar es menor que todos los elementos
 de la cola por lo que se recorrerá toda la cola para insertarlo en la última posición, por tanto la 
-complejidad de insertar un elemento de manera ordenada ser O(n) siendo n el tamaño de la lista. 
+complejidad de insertar un elemento de manera ordenada ser O(n) siendo n el tamaño de la cola. 
 ====================================================================================================
 */
 
@@ -96,8 +96,8 @@ funcion : front
 ====================================================================================================
 Complejidad de "front()" : O(1).
 ----------------------------------------------------------------------------------------------------
-Explicación: ver dato del elemento con mas primoridad de una cola sera simpre de complejidad constante O(1) 
-por que al la cola estar ordenada el elemneto con mas prioridad sera simpre el primero elemento.
+Explicación: ver el dato del elemento con mas prioridad de una cola sera simpre de complejidad constante O(1) 
+por que al la cola estar ordenada el elemento con mas prioridad sera simpre el primero elemento.
 ====================================================================================================
 */
 
