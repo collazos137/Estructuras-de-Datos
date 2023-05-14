@@ -15,7 +15,7 @@ ya que añadir o borrar un elemento al final o principio de una lista es O(1) y 
 un dato en un map con su respectiva clave es O(log(n)) (en el procesamiento de cada comando se hacen 
 consultas de valores alojados en el map).
 
-* dando así una complejidad de aproximada O(n*log(n) + m*log(n)), simplificando (porque se garantiza 
+* Dando así una complejidad de aproximada O(n*log(n) + m*log(n)), simplificando (porque se garantiza 
 que n será el mayor entre el número de población y el número los comandos) seria O(n*log(n)).
 ====================================================================================================
 */

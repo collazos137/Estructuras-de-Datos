@@ -4,7 +4,7 @@ Juan Diego Collazos Mejia // ID: 8977837 // May 12st 2023
 ====================================================================================================
 Complejidad : O(n)
 ====================================================================================================
-La complejidad de para cada caso (entendiendo cada caso como cada combinación de letras dada después
+La complejidad para cada caso (entendiendo cada caso como cada combinación de letras dada después
 del primer '#') estaría descrita por la ecuación t(n) = n*25 + n*26, siendo n la cantidad de palabras
 proporcionadas en la primera parte. Como sé específica en el problema la cantidad máxima de letras 
 por palabras es 25, además de eso por cada palabra debe crear una copia del arreglo donde sé contiene

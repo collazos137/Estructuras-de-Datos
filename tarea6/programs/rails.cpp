@@ -4,7 +4,7 @@ Juan Diego Collazos Mejia // ID: 8977837 // May 12st 2023
 ====================================================================================================
 Complejidad : O(n)
 ====================================================================================================
-La complejidad de para cada caso seria O(n) siendo n la cantidad de vagones, ya que en el peor de los
+La complejidad para cada caso seria O(n), siendo n la cantidad de vagones. En el peor de los
 casos la combinación resulta ser posible y por tanto se sacan todos los vagones del primer stack y 
 posteriormente del segundo (se verifican el orden todos los vagones) como añadir y borrar elementos 
 de un stack tiene complejidad O(1), entonces la complejidad resultante es aproximadamente O(2n), 

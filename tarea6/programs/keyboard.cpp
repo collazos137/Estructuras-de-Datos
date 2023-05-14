@@ -5,8 +5,8 @@ Juan Diego Collazos Mejia // ID: 8977837 // May 12st 2023
 Complejidad : O(n)
 ====================================================================================================
 La complejidad de producir el 'Beiju text' para cada caso es O(n) siendo n la cantidad de caracteres
-ingresados, porque recorre se recorre carácter a carácter y se guarda en una lista; como la complejidad
-de añadir un elemento a una lista conociendo el iterado es O(1) la complejidad del programa resulta O(n).
+ingresados, porque se recorre carácter a carácter y se guarda en una lista; como la complejidad
+de añadir un elemento a una lista conociendo el iterador es O(1) la complejidad del programa resulta O(n).
 ====================================================================================================
 */
 #include <list>
