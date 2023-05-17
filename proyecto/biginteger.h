@@ -1,15 +1,16 @@
 /*
-Autor: Juan Diego Collazos Mejia
-Date: 29 April 2023
-
-Representacion Estructura BigInteger 
+ * Autor: Juan Diego Collazos Mejia
+ * Date: 29 April 2023
+ * 
+ * Representacion Estructura BigInteger 
  */
 #ifndef BIG_INTEGER
 #define BIG_INTEGER
 
 #include <vector>
 #include <string>
-#include <stdio.h>
+#include <iostream>
+#include <list>
 
 using namespace std;
 
@@ -19,22 +20,21 @@ class BigInteger{
         int sign;
     public:
         /*Constructoras*/
-        BigInteger(string str);
-        BigInteger(BigInteger& num);
+        BigInteger(const string& str);
+        BigInteger(const BigInteger& num);
 
         /*Modificadoras*/
         void add(BigInteger& num2);
         void product(BigInteger& num2);
         void substract(BigInteger& num2);
-        void quotien(BigInteger& num2);
+        void quotient(BigInteger& num2);
         void remainder(BigInteger& num2);
-        void pow(BigInteger& num2);
+        void pow(int num2);
 
         /*Analizadoras*/
         string toString();
         int signf();
         int size();
-         void display();
 
         /*Operadores*/
             /*Modificadores*/
@@ -48,7 +48,20 @@ class BigInteger{
         bool operator<(BigInteger& num2);
         bool operator<=(BigInteger& num2);
         int operator[](int pos);
-        
+
+
+        /*Operaciones estáticas*/
+        static BigInteger sumarListaValores(list<BigInteger>& l );
+        static BigInteger multiplicarListaValores(list<BigInteger>& l);
 };
+
+
+
+/*Prototipos de operaciones auxiliares*/
+bool operator<=(vector<int>& num1, vector<int>& num2);
+void sum(vector<int>& num1, vector<int>& num2);
+void rest(vector<int>& num1, vector<int>& num2);
+void productVector(vector<int>& num1, vector<int>& num2);
+vector<int> powAux(vector<int>& digt, int num2);
 
 #endif
