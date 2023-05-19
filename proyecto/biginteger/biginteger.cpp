@@ -2,13 +2,27 @@
 
 /*= Constructoras =================================================================================================================*/
 
+BigInteger::BigInteger(){
+    sign = 0;
+    digt = { 0 };
+}
+
 BigInteger::BigInteger(const string& str){
     int len, i, n;
+    bool flag = false;
     n = (str[0] == '-') ? 1 : 0;
     sign = n, len = str.size() - n;
     digt.resize(len);
-    for(i = 0; i < len; ++i)
-        digt[len - i - 1] = str[i + n] - '0';
+    for(i = 0; i < len; ++i){
+        if(!flag && str[i + n] - '0')
+            flag = true;
+        if(flag)
+            digt[len - i - 1] = str[i + n] - '0';
+    }
+    if(!flag){
+        digt = { 0 };
+        sign = 0;
+    }
 }
 
 BigInteger::BigInteger(const BigInteger& num){
@@ -18,7 +32,8 @@ BigInteger::BigInteger(const BigInteger& num){
 
 /* = Modificadoras ===========================================================================================================*/
     /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
-void sum(vector<int>& num1, vector<int>& num2){
+
+void sum(vector<int>& num1, BigInteger& num2){
     int n = (num1.size() > num2.size()) ? num1.size() : num2.size();
     int acu = 0, sum, i;
     num1.resize(n + 1);
@@ -37,7 +52,7 @@ void sum(vector<int>& num1, vector<int>& num2){
         num1.resize(n);
 }
 
-void rest(vector<int>& num1, vector<int>& num2){
+void rest(vector<int>& num1, BigInteger& num2){
     int flag2 = 0, i = 0, flag1 = 1, flag3 = 1, ax;
     while(i < num1.size() && flag1){
         if(i < num2.size()){
@@ -69,23 +84,6 @@ void rest(vector<int>& num1, vector<int>& num2){
         num1.resize(ax);
 }
 
-vector<int> powAux(vector<int>& digt, int num2){
-    vector<int> ans;
-    if(num2 == 0){
-        ans.push_back(1);
-    }else if(num2 == 1){
-        ans = digt;
-    }else if(num2 % 2 == 0){
-        ans = powAux(digt, num2/2);
-        productVector(ans, ans);
-    }else{
-        ans = powAux(digt, (num2-1)/2);
-        productVector(ans, ans);
-        productVector(ans, digt);
-    }
-    return ans;
-}
-
 void productVector(vector<int>& num1, vector<int>& num2){
     vector<int> ans(num1.size() + num2.size());
     int product, i, j, acu = 0;
@@ -106,51 +104,51 @@ void productVector(vector<int>& num1, vector<int>& num2){
     /* - Canonicas ----------------------------------------------------------------------------------------------------------------*/
 
 void BigInteger::add(BigInteger &num2){
-    vector<int> ax(num2.size());
-    for(int i = 0; i < num2.size() ; ++i)
-        ax[i] = num2[i];
-
     if(signf() == num2.signf())
-        sum(digt, ax);
+        sum(digt, num2);
     else{
-        if(ax <= digt){
-            rest(digt, ax);
+        if(num2 <= digt){
+            rest(digt, num2);
             if(!digt[size() - 1]) 
                 sign = 0;
         }else{
-            rest(ax, digt);
+            BigInteger ax1(*this);
+            vector<int> ax2(num2.size());
+            for(int i = 0; i < num2.size() ; ++i)
+                ax2[i] = num2[i];
+            rest(ax2, ax1);
             sign = num2.signf();
-            digt = ax;
+            digt = ax2;
         }
     }
 }
 
 void BigInteger::substract(BigInteger &num2){
-    vector<int> ax(num2.size());
-    for(int i = 0; i < num2.size() ; ++i)
-        ax[i] = num2[i];
-
     if(signf() != num2.signf())
-        sum(digt, ax);
+        sum(digt, num2);
     else{
-        if(ax <= digt){
-            rest(digt, ax);
+        if(num2 <= digt){
+            rest(digt, num2);
             if(!digt[size() - 1]) 
                 sign = 0;
         }else{
-            rest(ax, digt);
+            BigInteger ax1(*this);
+            vector<int> ax2(num2.size());
+            for(int i = 0; i < num2.size() ; ++i)
+                ax2[i] = num2[i];
+            rest(ax2, ax1);
             sign = (!num2.signf()) ? 1 : 0;
-            digt = ax;
+            digt = ax2;
         }
     }
 }
 
 void BigInteger::product(BigInteger& num2){
-    if(num2.size() == 1 && num2[num2.size() - 1] == 0){
+    sign = (num2.signf() == sign) ? 0 : 1;
+    if(num2.size() == 1 && num2[0] == 0){
         sign = 0;
         digt = { 0 };
-    }else if(!(num2.size() == 1 && num2[num2.size() - 1] == 1)){
-        sign = (num2.signf() == sign) ? 0 : 1;
+    }else if(!(num2.size() == 1 && num2[0] == 1)){
         vector<int> ans(size() + num2.size());
         int product, i, j, acu = 0;
         for(i = 0; i < size(); ++i){
@@ -168,100 +166,105 @@ void BigInteger::product(BigInteger& num2){
     }
 }
 
-void BigInteger::quotient(BigInteger& num2){
-    sign = (num2.signf() == sign)? 0 : 1;
-    int flag1 = 1, flag2, flag3, i = size() - 1, t, j, k, n, l;
-    l = (size() >= num2.size()) ? size() - num2.size() + 1 : 1;
-    vector<int> ans(l, 0);
-    while(flag1 && i >= num2.size() - 1){
-        t = i, flag2 = 1, k = num2.size() - 1, j = t;
-        while(k >= 0){
-            if(num2[k] != digt[j]){
-                flag2 = digt[j] > num2[k];
-                k = 0;
+vector<int> divisionAux(vector<int>& num1,BigInteger& num2){
+    int itBegin, itFinish, itNum1, itNum2;
+    int  itAux, rationLen;
+    bool flag1, flag2, flag3;
+    bool compare;
+    itBegin = num1.size() - 1;
+    itFinish = itBegin - num2.size() + 1;
+    if(num1.size() >= num2.size()){
+        rationLen = num1.size() - num2.size() + 1;
+        flag1 = true;
+    }else{
+        rationLen = 1;
+        flag1 = false;
+    }
+    vector<int> ration(rationLen, 0);
+    while(flag1 && itFinish >= 0){
+        itNum1 = itBegin;
+        itNum2 = num2.size() - 1;
+        compare = true;
+        flag2 = true;
+        while(itNum2 >= 0 && flag2){
+            if(num2[itNum2] != num1[itNum1]){
+                compare = num1[itNum1] > num2[itNum2];
+                flag2 = false;
             }
-            --k, --j;
+            --itNum2;
+            --itNum1;
         }
-        if(!flag2){
-            if(t > num2.size() - 1) 
-                --t; 
+
+        if(flag2) compare = true;
+        
+        if(!compare){
+            if(itFinish > 0) 
+                --itFinish; 
             else 
-                flag1 = 0;
+                flag1 = false;
         }
         if(flag1){
-            k = 0, j = t - num2.size() + 1, flag3 = 0, n = i;
-            ans[j] += 1;
-            while(j <= n){
+            ration[itFinish] += 1;
+            itNum1 = itFinish;
+            itNum2 = 0;
+            itAux = itFinish - 1;
+            flag3 = false;
+            while(itBegin >= itNum1){
                 if(flag3){
-                    if(digt[j]){
-                        --digt[j];
-                        flag3 = 0;
+                    if(num1[itNum1]){
+                        --num1[itNum1];
+                        flag3 = false;
                     }else 
-                        digt[j] = 9;
+                        num1[itNum1] = 9;
                 }
-                if(k < num2.size()){
-                    if(num2[k] > digt[j]){
-                        digt[j] += 10;
-                        flag3 = 1;
+                if(itNum2 < num2.size()){
+                    if(num2[itNum2] > num1[itNum1]){
+                        num1[itNum1] += 10;
+                        flag3 = true;
                     }
-                    digt[j] -= num2[k];
+                    num1[itNum1] -= num2[itNum2];
                 }
-                if(digt[j]) 
-                    i = j;
-                ++k, ++j;
+                if(num1[itNum1]) 
+                    itAux = itNum1;
+                ++itNum2;
+                ++itNum1;
             }
+            while(!num1[itAux] && itAux > 0)
+                --itAux;
+
+            itFinish = itAux - num2.size() + 1;
+            itBegin = itAux;
         }
     }
-    digt = ans;
-    if(!digt[digt.size() - 1] && digt.size() != 1) 
+    if(itBegin >= 0) 
+        num1.resize(itBegin + 1);
+    else 
+        num1.resize(1);
+    
+    return ration;
+}
+
+void BigInteger::quotient(BigInteger& num2){
+    sign = (num2.signf() == sign)? 0 : 1;
+    digt = divisionAux(digt, num2);
+    if(!digt[digt.size() - 1] && digt.size() != 1)
         digt.resize(digt.size() - 1);
 }
 
 void BigInteger::remainder(BigInteger& num2){
-    int flag1 = 1, flag2, flag3, i = size() - 1, t, j, k, n;
-    while(flag1 && i >= num2.size() - 1){
-        t = i, flag2 = 1, k = num2.size() - 1, j = t;
-        while(k >= 0){
-            if(num2[k] != digt[j]){
-                flag2 = digt[j] > num2[k];
-                k = 0;
-            }
-            --k, --j;
-        }
-        if(!flag2){
-            if(t > num2.size() - 1)
-                --t;
-            else 
-                flag1 = 0;
-        }
-        if(flag1){
-            k = 0, j = t - num2.size() + 1, flag3 = 0, n = i;
-            while(j <= n){
-                if(flag3){
-                    if(digt[j]){
-                        --digt[j];
-                        flag3 = 0;
-                    }else 
-                        digt[j] = 9;
-                }
-                if(k < num2.size()){
-                    if(num2[k] > digt[j]){
-                        digt[j] += 10;
-                        flag3 = 1;
-                    }
-                    digt[j] -= num2[k];
-                }
-                if(digt[j]) 
-                    i = j;
-                ++k, ++j;
-            }
-        }
-    }
-    digt.resize(++i);
+    divisionAux(digt, num2);
 }
 
 void BigInteger::pow(int num2){
-    digt = powAux(digt, num2);
+    if(sign && !(num2 % 2)) sign = 0;
+    vector<int> rest = { 1 };
+    while(num2 > 0){
+        if(num2 % 2)
+            productVector(rest, digt);
+        productVector(digt, digt);
+        num2 /= 2;
+    }
+    digt = rest;
 }
 
 /*= Analizadoras ===================================================================================================================*/
@@ -321,7 +324,7 @@ BigInteger BigInteger::operator%(BigInteger& num2){
     /* Analiazdores ----------------------------------------------------------------------------------------------------------*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
-bool operator<=(vector<int>& num1, vector<int>& num2){
+bool operator<=(BigInteger& num1, vector<int>& num2){
     bool ans;
     int i = num1.size() - 1, flag = 1;
     if(num1.size() != num2.size()){
@@ -404,7 +407,7 @@ bool BigInteger::operator<=(BigInteger& num2){
 }
 /* operaciones estáticas =========================================================================================================================================*/
 
-BigInteger sumarListaValores(list<BigInteger>& l ){
+BigInteger BigInteger::sumarListaValores(list<BigInteger>& l ){
     list<BigInteger>::iterator it;
     BigInteger ans = *l.begin();
     for(it = ++l.begin(); it != l.end(); ++it)
@@ -412,7 +415,7 @@ BigInteger sumarListaValores(list<BigInteger>& l ){
     return ans;
 }
 
-BigInteger multiplicarListaValores(list<BigInteger>& l){
+BigInteger BigInteger::multiplicarListaValores(list<BigInteger>& l){
     list<BigInteger>::iterator it;
     BigInteger ans = *l.begin();
     for(it = ++l.begin() ; it != l.end(); ++it)

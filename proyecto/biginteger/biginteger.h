@@ -1,6 +1,6 @@
 /*
  * Autor: Juan Diego Collazos Mejia
- * Date: 29 April 2023
+ * Date: 19 May 2023
  * 
  * Representacion Estructura BigInteger 
  */
@@ -20,6 +20,7 @@ class BigInteger{
         int sign;
     public:
         /*Constructoras*/
+        BigInteger();
         BigInteger(const string& str);
         BigInteger(const BigInteger& num);
 
@@ -55,13 +56,10 @@ class BigInteger{
         static BigInteger multiplicarListaValores(list<BigInteger>& l);
 };
 
-
-
 /*Prototipos de operaciones auxiliares*/
-bool operator<=(vector<int>& num1, vector<int>& num2);
-void sum(vector<int>& num1, vector<int>& num2);
-void rest(vector<int>& num1, vector<int>& num2);
+bool operator<=(BigInteger& num1, vector<int>& num2);
+void sum(vector<int>& num1, BigInteger& num2);
+void rest(vector<int>& num1, BigInteger& num2);
 void productVector(vector<int>& num1, vector<int>& num2);
-vector<int> powAux(vector<int>& digt, int num2);
 
 #endif
