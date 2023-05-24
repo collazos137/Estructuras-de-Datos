@@ -8,21 +8,14 @@ BigInteger::BigInteger(){
 }
 
 BigInteger::BigInteger(const string& str){
-    int len, i, n;
-    bool flag = false;
+    int len, n;
     n = (str[0] == '-') ? 1 : 0;
-    sign = n, len = str.size() - n;
+    sign = n;
+    len = str.size() - n;
     digt.resize(len);
-    for(i = 0; i < len; ++i){
-        if(!flag && str[i + n] - '0')
-            flag = true;
-        if(flag)
-            digt[len - i - 1] = str[i + n] - '0';
-    }
-    if(!flag){
-        digt = { 0 };
-        sign = 0;
-    }
+    for(int i = 0; i < len; ++i)
+        digt[len - i - 1] = str[i + n] - '0';
+    
 }
 
 BigInteger::BigInteger(const BigInteger& num){
@@ -82,6 +75,84 @@ void rest(vector<int>& num1, BigInteger& num2){
     }
     if(!flag3 && (i == num1.size()))
         num1.resize(ax);
+}
+
+vector<int> divisionAux(vector<int>& num1,BigInteger& num2){
+    int itBegin, itFinish, itNum1, itNum2;
+    int  itAux, rationLen;
+    bool flag1, flag2, flag3;
+    bool compare;
+    itBegin = num1.size() - 1;
+    itFinish = itBegin - num2.size() + 1;
+    if(num1.size() >= num2.size()){
+        rationLen = num1.size() - num2.size() + 1;
+        flag1 = true;
+    }else{
+        rationLen = 1;
+        flag1 = false;
+    }
+    vector<int> ration(rationLen, 0);
+    while(flag1 && itFinish >= 0){
+        itNum1 = itBegin;
+        itNum2 = num2.size() - 1;
+        compare = true;
+        flag2 = true;
+        while(itNum2 >= 0 && flag2){
+            if(num2[itNum2] != num1[itNum1]){
+                compare = num1[itNum1] > num2[itNum2];
+                flag2 = false;
+            }
+            --itNum2;
+            --itNum1;
+        }
+
+        if(flag2) compare = true;
+        
+        if(!compare){
+            if(itFinish > 0) 
+                --itFinish; 
+            else 
+                flag1 = false;
+        }
+        if(flag1){
+            ration[itFinish] += 1;
+            itNum1 = itFinish;
+            itNum2 = 0;
+            itAux = itFinish - 1;
+            flag3 = false;
+            while(itBegin >= itNum1){
+                if(flag3){
+                    if(num1[itNum1]){
+                        --num1[itNum1];
+                        flag3 = false;
+                    }else 
+                        num1[itNum1] = 9;
+                }
+                if(itNum2 < num2.size()){
+                    if(num2[itNum2] > num1[itNum1]){
+                        num1[itNum1] += 10;
+                        flag3 = true;
+                    }
+                    num1[itNum1] -= num2[itNum2];
+                }
+                if(num1[itNum1]) 
+                    itAux = itNum1;
+                ++itNum2;
+                ++itNum1;
+            }
+            while(!num1[itAux] && itAux > 0)
+                --itAux;
+
+            itFinish = itAux - num2.size() + 1;
+            itBegin = itAux;
+        }
+    }
+    if(itBegin >= 0) 
+        num1.resize(itBegin + 1);
+    else 
+        num1.resize(1);
+    
+    return ration;
 }
 
 void productVector(vector<int>& num1, vector<int>& num2){
@@ -164,84 +235,6 @@ void BigInteger::product(BigInteger& num2){
         if(digt[digt.size() - 1] == 0)
             digt.resize(ans.size() - 1);
     }
-}
-
-vector<int> divisionAux(vector<int>& num1,BigInteger& num2){
-    int itBegin, itFinish, itNum1, itNum2;
-    int  itAux, rationLen;
-    bool flag1, flag2, flag3;
-    bool compare;
-    itBegin = num1.size() - 1;
-    itFinish = itBegin - num2.size() + 1;
-    if(num1.size() >= num2.size()){
-        rationLen = num1.size() - num2.size() + 1;
-        flag1 = true;
-    }else{
-        rationLen = 1;
-        flag1 = false;
-    }
-    vector<int> ration(rationLen, 0);
-    while(flag1 && itFinish >= 0){
-        itNum1 = itBegin;
-        itNum2 = num2.size() - 1;
-        compare = true;
-        flag2 = true;
-        while(itNum2 >= 0 && flag2){
-            if(num2[itNum2] != num1[itNum1]){
-                compare = num1[itNum1] > num2[itNum2];
-                flag2 = false;
-            }
-            --itNum2;
-            --itNum1;
-        }
-
-        if(flag2) compare = true;
-        
-        if(!compare){
-            if(itFinish > 0) 
-                --itFinish; 
-            else 
-                flag1 = false;
-        }
-        if(flag1){
-            ration[itFinish] += 1;
-            itNum1 = itFinish;
-            itNum2 = 0;
-            itAux = itFinish - 1;
-            flag3 = false;
-            while(itBegin >= itNum1){
-                if(flag3){
-                    if(num1[itNum1]){
-                        --num1[itNum1];
-                        flag3 = false;
-                    }else 
-                        num1[itNum1] = 9;
-                }
-                if(itNum2 < num2.size()){
-                    if(num2[itNum2] > num1[itNum1]){
-                        num1[itNum1] += 10;
-                        flag3 = true;
-                    }
-                    num1[itNum1] -= num2[itNum2];
-                }
-                if(num1[itNum1]) 
-                    itAux = itNum1;
-                ++itNum2;
-                ++itNum1;
-            }
-            while(!num1[itAux] && itAux > 0)
-                --itAux;
-
-            itFinish = itAux - num2.size() + 1;
-            itBegin = itAux;
-        }
-    }
-    if(itBegin >= 0) 
-        num1.resize(itBegin + 1);
-    else 
-        num1.resize(1);
-    
-    return ration;
 }
 
 void BigInteger::quotient(BigInteger& num2){

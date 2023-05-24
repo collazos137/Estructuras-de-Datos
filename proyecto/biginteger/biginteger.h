@@ -61,5 +61,6 @@ bool operator<=(BigInteger& num1, vector<int>& num2);
 void sum(vector<int>& num1, BigInteger& num2);
 void rest(vector<int>& num1, BigInteger& num2);
 void productVector(vector<int>& num1, vector<int>& num2);
+vector<int> divisionAux(vector<int>& num1,BigInteger& num2);
 
 #endif
