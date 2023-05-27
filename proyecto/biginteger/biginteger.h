@@ -1,6 +1,6 @@
 /*
- * Autor: Juan Diego Collazos Mejia
- * Date: 19 May 2023
+ * Autor: Juan Diego Collazos Mejía
+ * Date: 27 May 2023
  * 
  * Representacion Estructura BigInteger 
  */
@@ -17,7 +17,7 @@ using namespace std;
 class BigInteger{
     private:
         vector<int> digt;
-        int sign;
+        bool sign;
     public:
         /*Constructoras*/
         BigInteger();
@@ -33,21 +33,25 @@ class BigInteger{
         void pow(int num2);
 
         /*Analizadoras*/
+            /*Canonicas*/
         string toString();
-        int signf();
+            /*Axuliares*/
+        bool signf();
         int size();
 
         /*Operadores*/
-            /*Modificadores*/
+            /*Aritmético*/
         BigInteger operator+(BigInteger& num2);
         BigInteger operator-(BigInteger& num2);
         BigInteger operator*(BigInteger& num2);
         BigInteger operator/(BigInteger& num2);
         BigInteger operator%(BigInteger& num2);
             /*Analizadores*/
+                /*Canonicas*/
         bool operator==(BigInteger& num2);
         bool operator<(BigInteger& num2);
         bool operator<=(BigInteger& num2);
+                /*Axuliares*/
         int operator[](int pos);
 
 

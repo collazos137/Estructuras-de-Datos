@@ -1,16 +1,22 @@
+/*
+ * Autor: Juan Diego Collazos Mejía
+ * Date: 27 May 2023
+ * 
+ * Impemnetacion Estructura BigInteger 
+ */
 #include "biginteger.h"
 
 /*= Constructoras =================================================================================================================*/
 
 BigInteger::BigInteger(){
-    sign = 0;
+    sign = false;
     digt = { 0 };
 }
 
 BigInteger::BigInteger(const string& str){
     int len, n;
     n = (str[0] == '-') ? 1 : 0;
-    sign = n;
+    sign = (n)? true : false;
     len = str.size() - n;
     digt.resize(len);
     for(int i = 0; i < len; ++i)
@@ -77,7 +83,7 @@ void rest(vector<int>& num1, BigInteger& num2){
         num1.resize(ax);
 }
 
-vector<int> divisionAux(vector<int>& num1,BigInteger& num2){
+vector<int> divisionAux(vector<int>& num1, BigInteger& num2){
     int itBegin, itFinish, itNum1, itNum2;
     int  itAux, rationLen;
     bool flag1, flag2, flag3;
@@ -114,6 +120,7 @@ vector<int> divisionAux(vector<int>& num1,BigInteger& num2){
             else 
                 flag1 = false;
         }
+
         if(flag1){
             ration[itFinish] += 1;
             itNum1 = itFinish;
@@ -174,14 +181,14 @@ void productVector(vector<int>& num1, vector<int>& num2){
 
     /* - Canonicas ----------------------------------------------------------------------------------------------------------------*/
 
-void BigInteger::add(BigInteger &num2){
+void BigInteger::add(BigInteger& num2){
     if(signf() == num2.signf())
         sum(digt, num2);
     else{
         if(num2 <= digt){
             rest(digt, num2);
             if(!digt[size() - 1]) 
-                sign = 0;
+                sign = false;
         }else{
             BigInteger ax1(*this);
             vector<int> ax2(num2.size());
@@ -194,30 +201,30 @@ void BigInteger::add(BigInteger &num2){
     }
 }
 
-void BigInteger::substract(BigInteger &num2){
+void BigInteger::substract(BigInteger& num2){
     if(signf() != num2.signf())
         sum(digt, num2);
     else{
         if(num2 <= digt){
             rest(digt, num2);
             if(!digt[size() - 1]) 
-                sign = 0;
+                sign = false;
         }else{
             BigInteger ax1(*this);
             vector<int> ax2(num2.size());
             for(int i = 0; i < num2.size() ; ++i)
                 ax2[i] = num2[i];
             rest(ax2, ax1);
-            sign = (!num2.signf()) ? 1 : 0;
+            sign = !num2.signf();
             digt = ax2;
         }
     }
 }
 
 void BigInteger::product(BigInteger& num2){
-    sign = (num2.signf() == sign) ? 0 : 1;
-    if(num2.size() == 1 && num2[0] == 0){
-        sign = 0;
+    sign = !(num2.signf() == sign);
+    if(num2.size() == 1 && num2[0] == 0 || digt.size() == 1 && digt[0] == 0){
+        sign = false;
         digt = { 0 };
     }else if(!(num2.size() == 1 && num2[0] == 1)){
         vector<int> ans(size() + num2.size());
@@ -238,10 +245,12 @@ void BigInteger::product(BigInteger& num2){
 }
 
 void BigInteger::quotient(BigInteger& num2){
-    sign = (num2.signf() == sign)? 0 : 1;
-    digt = divisionAux(digt, num2);
-    if(!digt[digt.size() - 1] && digt.size() != 1)
-        digt.resize(digt.size() - 1);
+    sign = !(num2.signf() == sign);
+    if(!(num2.size() == 1 && num2[0] == 1)){
+        digt = divisionAux(digt, num2);
+        if(!digt[digt.size() - 1] && digt.size() != 1)
+            digt.resize(digt.size() - 1);
+    }
 }
 
 void BigInteger::remainder(BigInteger& num2){
@@ -249,7 +258,7 @@ void BigInteger::remainder(BigInteger& num2){
 }
 
 void BigInteger::pow(int num2){
-    if(sign && !(num2 % 2)) sign = 0;
+    if(sign && !(num2 % 2)) sign = false;
     vector<int> rest = { 1 };
     while(num2 > 0){
         if(num2 % 2)
@@ -263,7 +272,7 @@ void BigInteger::pow(int num2){
 /*= Analizadoras ===================================================================================================================*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
-int BigInteger::signf(){
+bool BigInteger::signf(){
     return sign;
 }
 
@@ -282,7 +291,7 @@ string BigInteger::toString(){
 }
 
 /* = Operadores ======================================================================================================================================*/
-    /* Modificadores ----------------------------------------------------------------------------------------------------------*/
+    /* Aritmético ----------------------------------------------------------------------------------------------------------*/
 
 BigInteger BigInteger::operator+(BigInteger& num2){
     BigInteger ans(*this);
@@ -398,6 +407,7 @@ bool BigInteger::operator<=(BigInteger& num2){
     }
     return ans;
 }
+
 /* operaciones estáticas =========================================================================================================================================*/
 
 BigInteger BigInteger::sumarListaValores(list<BigInteger>& l ){
