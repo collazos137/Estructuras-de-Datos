@@ -10,8 +10,8 @@
 /*= Constructoras =================================================================================================================*/
 
 /*
-Constructor por defecto
-Entrada: Ninguna
+Constructor por defecto.
+Entrada: Ninguna.
 */
 BigInteger::BigInteger(){
     sign = false;
@@ -19,7 +19,7 @@ BigInteger::BigInteger(){
 }
 
 /*
-Constructor que recibe string
+Constructor que recibe string.
 Entrada: Un string del número a representar.
 */
 BigInteger::BigInteger(const string& str){
@@ -34,7 +34,7 @@ BigInteger::BigInteger(const string& str){
 }
 
 /*
-Constructor que recibe un Bigintger
+Constructor que recibe un Bigintger.
 Entrada: Un Bigintger a copiar.
 */
 BigInteger::BigInteger(const BigInteger& num){
@@ -46,7 +46,7 @@ BigInteger::BigInteger(const BigInteger& num){
     /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
 /*
-Operación sum
+Operación sum.
 Entrada: Un vector de enteros y un objeto BigIngeger.
 Descripción: Esta operación le suma al vector el número representado en el Biginteger.
 */
@@ -70,7 +70,7 @@ void sum(vector<int>& num1, BigInteger& num2){
 }
 
 /*
-Operación rest
+Operación rest.
 Entrada: Un vector de enteros y un objeto BigIngeger.
 Descripción: Esta operación le resta al vector el número representado en el Biginteger.
 (Para que funcione correctamente, el valor representado en el vector debe de ser mayor al representado en el Biginteger).
