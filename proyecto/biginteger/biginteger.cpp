@@ -336,6 +336,29 @@ void BigInteger::pow(int num2){
 
 /*= Analizadoras ===================================================================================================================*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
+        
+/*
+Función esMenorOIgual.
+Entrada: Un BigInteger y un vector.
+Salida: Un bool que es true si la representación del primer parámetro es menor o igual al segundo y false en caso contrario.
+*/     
+bool esMenorOIgual(BigInteger& num1, vector<int>& num2){
+    bool ans;
+    int i = num1.size() - 1, flag = 1;
+    if(num1.size() != num2.size()){
+        ans = num1.size() < num2.size();
+    }else{
+        while(i >= 0 && flag){
+            if(num1[i] != num2[i]){
+                ans = num1[i] < num2[i];
+                flag = 0;
+            }
+            --i;
+        }
+        if(flag) ans = true;
+    }
+    return ans;
+}
 
 /*
 Función signf.
@@ -430,29 +453,6 @@ BigInteger BigInteger::operator%(BigInteger& num2){
 
     /* Analiazdores ----------------------------------------------------------------------------------------------------------*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
-
-/*
-Función esMenorOIgual.
-Entrada: Un BigInteger y un vector.
-Salida: Un bool que es true si la representación del primer parámetro es menor o igual al segundo y false en caso contrario.
-*/     
-bool esMenorOIgual(BigInteger& num1, vector<int>& num2){
-    bool ans;
-    int i = num1.size() - 1, flag = 1;
-    if(num1.size() != num2.size()){
-        ans = num1.size() < num2.size();
-    }else{
-        while(i >= 0 && flag){
-            if(num1[i] != num2[i]){
-                ans = num1[i] < num2[i];
-                flag = 0;
-            }
-            --i;
-        }
-        if(flag) ans = true;
-    }
-    return ans;
-}
 
 /*
 Operador '[]'.
