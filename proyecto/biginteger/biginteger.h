@@ -1,9 +1,10 @@
 /*
  * Autor: Juan Diego Collazos Mejía
- * Date: 27 May 2023
+ * Date: 29 May 2023
  * 
  * Representacion Estructura BigInteger 
  */
+
 #ifndef BIG_INTEGER
 #define BIG_INTEGER
 
@@ -54,17 +55,16 @@ class BigInteger{
                 /*Axuliares*/
         int operator[](int pos);
 
-
         /*Operaciones estáticas*/
         static BigInteger sumarListaValores(list<BigInteger>& l );
         static BigInteger multiplicarListaValores(list<BigInteger>& l);
 };
 
 /*Prototipos de operaciones auxiliares*/
-bool operator<=(BigInteger& num1, vector<int>& num2);
 void sum(vector<int>& num1, BigInteger& num2);
 void rest(vector<int>& num1, BigInteger& num2);
 void productVector(vector<int>& num1, vector<int>& num2);
+bool esMenorOIgual(BigInteger& num1, vector<int>& num2);
 vector<int> divisionAux(vector<int>& num1,BigInteger& num2);
 
 #endif

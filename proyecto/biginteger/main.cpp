@@ -1,14 +1,14 @@
 #include "biginteger.h"
 
 int main(){
-    int casos, n, i;
-    string v1, v2, aux;
-    BigInteger a("0"), b("0"), c("0");
-    BigInteger cero("0");
+	int casos, n, i;
+	string v1, v2, aux;
+	BigInteger a("0"), b("0"), c("0");
+	BigInteger cero("0");
 
-    cin >> casos;
-    cin.ignore();
-    while(casos--){
+	cin >> casos;
+	cin.ignore();
+	while(casos--){
 		getline(cin, v1);
 		getline(cin, v2);
 		a = BigInteger(v1);
@@ -19,7 +19,7 @@ int main(){
 		cout << a.toString() << " - " << b.toString() << " = " << c.toString() << endl;
 		c = a * b;
 		cout << a.toString() << " * " << b.toString() << " = " << c.toString() << endl;
-		
+
 		if(cero < a && cero < b){
 			c = a % b;
 			cout << a.toString() << " % " << b.toString() << " = " << c.toString() << endl;
@@ -35,11 +35,11 @@ int main(){
 		cout << a.toString() << " ** 10 = ";
 		a.pow(10);
 		cout << a.toString() << endl;
-    }
+	}
 
-    cin >> casos;
-    cin.ignore();
-    while(casos--){
+	cin >> casos;
+	cin.ignore();
+	while(casos--){
 		getline(cin, v1);
 		a = BigInteger(v1);
 		cout << a.toString() << endl;
@@ -60,21 +60,21 @@ int main(){
 		if(cero < a && cero < b){
 			a.quotient(b);
 			cout << a.toString() << endl;
+		}
+		cin >> n;
+		cin.ignore();
+		a.pow(n);
+		cout << a.toString() << endl;
+		getline(cin, v2);
+		b = BigInteger(v2);
+		if(cero < a && cero < b){
+			a.remainder(b);
+			cout << a.toString() << endl;
+		}
 	}
-	cin >> n;
-	cin.ignore();
-	a.pow(n);
-	cout << a.toString() << endl;
-	getline(cin, v2);
-	b = BigInteger(v2);
-	if(cero < a && cero < b){
-	    a.remainder(b);
-	   cout << a.toString() << endl;
-	}
-    }
 
-    cin >> casos;
-    while(casos--){
+	cin >> casos;
+	while(casos--){
 		cin >> n;
 		cin.ignore();
 		list<BigInteger> l;
@@ -86,7 +86,7 @@ int main(){
 		b = BigInteger::multiplicarListaValores(l);
 		cout << a.toString() << endl;
 		cout << b.toString() << endl;
-    }
+	}
 
-    return 0;
+	return 0;
 }

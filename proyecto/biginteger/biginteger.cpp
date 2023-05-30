@@ -1,18 +1,27 @@
 /*
  * Autor: Juan Diego Collazos Mejía
- * Date: 27 May 2023
+ * Date: 29 May 2023
  * 
  * Impemnetacion Estructura BigInteger 
  */
+
 #include "biginteger.h"
 
 /*= Constructoras =================================================================================================================*/
 
+/*
+Constructor por defecto
+Entrada: Ninguna
+*/
 BigInteger::BigInteger(){
     sign = false;
     digt = { 0 };
 }
 
+/*
+Constructor que recibe string
+Entrada: Un string del número a representar.
+*/
 BigInteger::BigInteger(const string& str){
     int len, n;
     n = (str[0] == '-') ? 1 : 0;
@@ -24,6 +33,10 @@ BigInteger::BigInteger(const string& str){
     
 }
 
+/*
+Constructor que recibe un Bigintger
+Entrada: Un Bigintger a copiar.
+*/
 BigInteger::BigInteger(const BigInteger& num){
     sign = num.sign;
     digt = num.digt;
@@ -32,6 +45,11 @@ BigInteger::BigInteger(const BigInteger& num){
 /* = Modificadoras ===========================================================================================================*/
     /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
+/*
+Operación sum
+Entrada: Un vector de enteros y un objeto BigIngeger.
+Descripción: Esta operación le suma al vector el número representado en el Biginteger.
+*/
 void sum(vector<int>& num1, BigInteger& num2){
     int n = (num1.size() > num2.size()) ? num1.size() : num2.size();
     int acu = 0, sum, i;
@@ -51,6 +69,12 @@ void sum(vector<int>& num1, BigInteger& num2){
         num1.resize(n);
 }
 
+/*
+Operación rest
+Entrada: Un vector de enteros y un objeto BigIngeger.
+Descripción: Esta operación le resta al vector el número representado en el Biginteger.
+(Para que funcione correctamente, el valor representado en el vector debe de ser mayor al representado en el Biginteger).
+*/
 void rest(vector<int>& num1, BigInteger& num2){
     int flag2 = 0, i = 0, flag1 = 1, flag3 = 1, ax;
     while(i < num1.size() && flag1){
@@ -83,6 +107,12 @@ void rest(vector<int>& num1, BigInteger& num2){
         num1.resize(ax);
 }
 
+/*
+Función divisionAux.
+Entrada: Un vector de enteros y un objeto BigIngeger.
+Salida: Un vector de enteros que el resultado de dividir de manera entera el numero representado en el vector sobre el Bigintger.
+(Además de calcular la razón convierte al vector de entrada en el módulo de num1 % numn2).
+*/
 vector<int> divisionAux(vector<int>& num1, BigInteger& num2){
     int itBegin, itFinish, itNum1, itNum2;
     int  itAux, rationLen;
@@ -162,6 +192,11 @@ vector<int> divisionAux(vector<int>& num1, BigInteger& num2){
     return ration;
 }
 
+/*
+Operación productVector.
+Entrada: Dos vectores de enteros.
+Salida: Un vector de enteros que el resultado de multiplicar los dos números representados en los vectores de entrada.
+*/
 void productVector(vector<int>& num1, vector<int>& num2){
     vector<int> ans(num1.size() + num2.size());
     int product, i, j, acu = 0;
@@ -181,11 +216,16 @@ void productVector(vector<int>& num1, vector<int>& num2){
 
     /* - Canonicas ----------------------------------------------------------------------------------------------------------------*/
 
+/*
+Operación add.
+Entrada: Un Biginteger.
+Descripción: Convierte al objeto actual en el resultado de sumarlo con el objeto de entrada.
+*/
 void BigInteger::add(BigInteger& num2){
     if(signf() == num2.signf())
         sum(digt, num2);
     else{
-        if(num2 <= digt){
+        if(esMenorOIgual(num2, digt)){
             rest(digt, num2);
             if(!digt[size() - 1]) 
                 sign = false;
@@ -201,11 +241,16 @@ void BigInteger::add(BigInteger& num2){
     }
 }
 
+/*
+Operación substract.
+Entrada: Un Biginteger.
+Descripción: Convierte al objeto actual en el resultado de restarlo con el objeto de entrada.
+*/
 void BigInteger::substract(BigInteger& num2){
     if(signf() != num2.signf())
         sum(digt, num2);
     else{
-        if(num2 <= digt){
+        if(esMenorOIgual(num2, digt)){
             rest(digt, num2);
             if(!digt[size() - 1]) 
                 sign = false;
@@ -221,6 +266,11 @@ void BigInteger::substract(BigInteger& num2){
     }
 }
 
+/*
+Operación product.
+Entrada: Un Biginteger.
+Descripción: Convierte al objeto actual en el resultado de multiplicarlo con el objeto de entrada.
+*/
 void BigInteger::product(BigInteger& num2){
     sign = !(num2.signf() == sign);
     if(num2.size() == 1 && num2[0] == 0 || digt.size() == 1 && digt[0] == 0){
@@ -244,6 +294,11 @@ void BigInteger::product(BigInteger& num2){
     }
 }
 
+/*
+Operación quotient.
+Entrada: Un Biginteger.
+Descripción: Convierte al objeto actual en el resultado de dividirlo por el objeto de entrada.
+*/
 void BigInteger::quotient(BigInteger& num2){
     sign = !(num2.signf() == sign);
     if(!(num2.size() == 1 && num2[0] == 1)){
@@ -253,10 +308,20 @@ void BigInteger::quotient(BigInteger& num2){
     }
 }
 
+/*
+Operación remainder.
+Entrada: Un Biginteger.
+Descripción: Convierte al objeto actual en el resultado de aplicar la operacion modulo por el objeto de entrada.
+*/
 void BigInteger::remainder(BigInteger& num2){
     divisionAux(digt, num2);
 }
 
+/*
+Operación pow.
+Entrada: Un entero.
+Descripción: Convierte al objeto actual en el resultado de elevarlo teniendo como exponente el entero de entrada.
+*/
 void BigInteger::pow(int num2){
     if(sign && !(num2 % 2)) sign = false;
     vector<int> rest = { 1 };
@@ -272,15 +337,30 @@ void BigInteger::pow(int num2){
 /*= Analizadoras ===================================================================================================================*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
+/*
+Función signf.
+Entrada: Ninguna.
+Salida: Un bool que representa signo del objeto actual (Flase : +, True : -).
+*/
 bool BigInteger::signf(){
     return sign;
 }
 
+/*
+Función size.
+Entrada: Ninguna.
+Salida: Un entero que presenta el número de dígitos de objeto actual.
+*/
 int BigInteger::size(){
     return digt.size();
 }
         /* - Canonicas ----------------------------------------------------------------------------------------------------------------*/
 
+/*
+Función toString.
+Entrada: Ninguna.
+Salida: Un string que representa el signo y los dígitos del objeto actual.
+*/
 string BigInteger::toString(){
     string ans = "";
     if(sign) ans += '-';
@@ -293,30 +373,55 @@ string BigInteger::toString(){
 /* = Operadores ======================================================================================================================================*/
     /* Aritmético ----------------------------------------------------------------------------------------------------------*/
 
+/*
+Operador '+'.
+Entrada: Un BigInteger.
+Salida: Un Bigintger que es el resultado de la suma del objeto actual con el de entrada.
+*/
 BigInteger BigInteger::operator+(BigInteger& num2){
     BigInteger ans(*this);
     ans.add(num2);
     return ans;
 }
 
+/*
+Operador '-'.
+Entrada: Un BigInteger.
+Salida: Un Bigintger que es el resultado de la resta del objeto actual con el de entrada.
+*/
 BigInteger BigInteger::operator-(BigInteger& num2){
     BigInteger ans(*this);
     ans.substract(num2);
     return ans;
 }
 
+/*
+Operador '*'.
+Entrada: Un BigInteger.
+Salida: Un Bigintger que es el resultado de la multiplicación del objeto actual por el de entrada.
+*/
 BigInteger BigInteger::operator*(BigInteger& num2){
     BigInteger ans(*this);
     ans.product(num2);
     return ans;
 }
-        
+
+/*
+Operador '/'.
+Entrada: Un BigInteger.
+Salida: Un Bigintger que es el resultado de la división del objeto actual sobre el de entrada.
+*/   
 BigInteger BigInteger::operator/(BigInteger& num2){
     BigInteger ans(*this);
     ans.quotient(num2);
     return ans;
 }
-        
+
+/*
+Operador '%'.
+Entrada: Un BigInteger.
+Salida: Un Bigintger que es el resultado del objeto actual modulo el objeto de entrada.
+*/      
 BigInteger BigInteger::operator%(BigInteger& num2){
     BigInteger ans(*this);
     ans.remainder(num2);
@@ -326,7 +431,12 @@ BigInteger BigInteger::operator%(BigInteger& num2){
     /* Analiazdores ----------------------------------------------------------------------------------------------------------*/
         /* - Auxiliares ----------------------------------------------------------------------------------------------------------*/
 
-bool operator<=(BigInteger& num1, vector<int>& num2){
+/*
+Función esMenorOIgual.
+Entrada: Un BigInteger y un vector.
+Salida: Un bool que es true si la representación del primer parámetro es menor o igual al segundo y false en caso contrario.
+*/     
+bool esMenorOIgual(BigInteger& num1, vector<int>& num2){
     bool ans;
     int i = num1.size() - 1, flag = 1;
     if(num1.size() != num2.size()){
@@ -344,12 +454,22 @@ bool operator<=(BigInteger& num1, vector<int>& num2){
     return ans;
 }
 
+/*
+Operador '[]'.
+Entrada: Un entero.
+Salida: Un entero que es el valor que se encuentra en la posición de del entero de entrada.
+*/    
 int BigInteger::operator[](int pos){
     return digt[pos];
 }
 
         /* - Canonicos ----------------------------------------------------------------------------------------------------------------*/
 
+/*
+Operador '=='.
+Entrada: Un Binteger.
+Salida: Un bool que es true si la representación del objeto actual es igual al de entrada y false en caso contrario.
+*/    
 bool BigInteger::operator==(BigInteger& num2){
     bool ans;
     int i = size() - 1, flag = 1;
@@ -368,6 +488,11 @@ bool BigInteger::operator==(BigInteger& num2){
     return ans;
 }
 
+/*
+Operador '<'.
+Entrada: Un Binteger.
+Salida: Un bool que es true si la representación del objeto actual es menor al de entrada y false en caso contrario.
+*/   
 bool BigInteger::operator<(BigInteger& num2){
     bool ans;
     int i = size() - 1, flag = 1;
@@ -388,6 +513,11 @@ bool BigInteger::operator<(BigInteger& num2){
     return ans;
 }
 
+/*
+Operador '<='.
+Entrada: Un Binteger.
+Salida: Un bool que es true si la representación del objeto actual es menor o igual al de entrada y false en caso contrario.
+*/   
 bool BigInteger::operator<=(BigInteger& num2){
     bool ans;
     int i = size() - 1, flag = 1;
@@ -410,6 +540,11 @@ bool BigInteger::operator<=(BigInteger& num2){
 
 /* operaciones estáticas =========================================================================================================================================*/
 
+/*
+Función sumarListaValores.
+Entrada: Una Lista de Bigintegers.
+Salida: Un Biginteger que es el resultado de sumar entre si todos lo elementos de la lista.
+*/   
 BigInteger BigInteger::sumarListaValores(list<BigInteger>& l ){
     list<BigInteger>::iterator it;
     BigInteger ans = *l.begin();
@@ -418,6 +553,11 @@ BigInteger BigInteger::sumarListaValores(list<BigInteger>& l ){
     return ans;
 }
 
+/*
+Función sumarListaValores.
+Entrada: Una Lsita de Bigintegers.
+Salida: Un Biginteger que es el resultado de multiplicar entre si todos lo elementos de la lista.
+*/   
 BigInteger BigInteger::multiplicarListaValores(list<BigInteger>& l){
     list<BigInteger>::iterator it;
     BigInteger ans = *l.begin();
